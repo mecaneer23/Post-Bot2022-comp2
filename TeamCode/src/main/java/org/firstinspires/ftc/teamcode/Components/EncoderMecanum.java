@@ -157,7 +157,7 @@ public class EncoderMecanum implements Component {
 
     private double calculateMotorPower(int currentPositionTicks, double maxPower, double totalDistanceTicks) {
         double motorPower = ((-4.0 * maxPower) / Math.pow(totalDistanceTicks, 2.0)) * Math.pow(totalDistanceTicks / 4.0 - currentPositionTicks, 2.0) + maxPower;
-        if (motorPower < 0.1) this.isRunning = false;
+        this.isRunning = motorPower >= 0.1;
         return motorPower;
     }
 
