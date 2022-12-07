@@ -1,46 +1,37 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.Base.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Base.Robot;
-import org.firstinspires.ftc.teamcode.Bots.PostBot;
-import org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import org.firstinspires.ftc.teamcode.Base.BaseOpMode
+import org.firstinspires.ftc.teamcode.Base.Robot
+import org.firstinspires.ftc.teamcode.Bots.PostBot
+import org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition
 
 @Autonomous
-public class Park extends BaseOpMode {
-    public PostBot robot;
-
-    SleeveDetection.ParkingPosition parkingPosition;
-
-    @Override
-    protected Robot setRobot() {
-        this.robot = new PostBot();
-        return this.robot;
+class Park : BaseOpMode() {
+    val robot: PostBot = PostBot()
+    var parkingPosition: ParkingPosition = ParkingPosition.DEFAULT
+    override fun setRobot(): Robot {
+        return robot
     }
 
-    @Override
-    protected boolean setTeleOp() {
-        return false;
+    override fun setTeleOp(): Boolean {
+        return false
     }
 
-    @Override
-    public void onInit() throws InterruptedException {
-        robot.camera.requestStart();
-        robot.grabber.close();
+    override fun onInit() {
+        robot.camera.requestStart()
+        robot.grabber.close()
     }
 
-    @Override
-    public void onStart() throws InterruptedException {
-        parkingPosition = robot.camera.getParkingPosition();
-        robot.encoderMecanum.driveForward(4);
-        robot.encoderMecanum.strafeLeft(4);
-
-        robot.encoderMecanum.driveForward(24);
-        if (parkingPosition == SleeveDetection.ParkingPosition.LEFT) {
-            robot.encoderMecanum.strafeLeft(24);
-        } else if (parkingPosition == SleeveDetection.ParkingPosition.RIGHT) {
-            robot.encoderMecanum.strafeRight(24);
+    override fun onStart() {
+        parkingPosition = robot.camera.parkingPosition
+        robot.encoderMecanum.driveForward(4.0)
+        robot.encoderMecanum.strafeLeft(4.0)
+        robot.encoderMecanum.driveForward(24.0)
+        if (parkingPosition == ParkingPosition.LEFT) {
+            robot.encoderMecanum.strafeLeft(24.0)
+        } else if (parkingPosition == ParkingPosition.RIGHT) {
+            robot.encoderMecanum.strafeRight(24.0)
         }
     }
 }
