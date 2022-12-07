@@ -21,7 +21,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         try {
             robot.mapHardware(hardwareMap, telemetry, this, isTeleOp);
             robot.components.forEach(Component::init);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e){
             throw new NullPointerException("robot is null or component is null");
         }
 
@@ -32,7 +32,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         onStart();
         robot.components.forEach(Component::start);
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             gamepadListener1.update(gamepad1);
             gamepadListener2.update(gamepad2);
             onUpdate();

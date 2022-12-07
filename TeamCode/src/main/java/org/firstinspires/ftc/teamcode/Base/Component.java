@@ -4,7 +4,7 @@ public interface Component {
 
     void init();
     void start();
-    void update() throws InterruptedException;
+    void update();
 
     String getTelemetry();
 }
