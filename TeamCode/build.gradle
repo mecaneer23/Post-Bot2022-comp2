@@ -25,5 +25,4 @@ dependencies {
     implementation 'androidx.core:core-ktx:+'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
     implementation 'org.openftc:easyopencv:1.5.2'
-    implementation 'org.openftc:rev-extensions-2:1.2'
 }
