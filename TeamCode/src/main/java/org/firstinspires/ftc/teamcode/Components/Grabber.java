@@ -19,8 +19,8 @@ public class Grabber implements Component {
 
     public Grabber(String deviceName, HardwareMap hardwareMap, Telemetry telemetry) {
         grabber = hardwareMap.get(Servo.class, deviceName);
-        this.OPEN = 0.2;
-        this.CLOSED = 1;
+        this.OPEN = 1;
+        this.CLOSED = 0.2;
         this.telemetry = telemetry;
     }
 
