@@ -23,18 +23,19 @@ public class MainOp extends BaseOpMode {
 
     @Override
     public void onInit() throws InterruptedException {
+        robot.grabber.open();
 //        robot.camera.requestStart();
     }
 
     @Override
     public void onStart() throws InterruptedException {
-        gamepadListener2.y.onPress = () -> {
+        gamepadListener1.y.onPress = () -> {
             robot.grabber.close();
             robot.arm.toHigh();
 //            driveForward();
 //            robot.camera.goThisDirection(robot.mecanum, robot.camera.getGoDirection());
         };
-        gamepadListener2.a.onPress = () -> {
+        gamepadListener1.a.onPress = () -> {
             robot.grabber.open();
             robot.arm.toZero();
 //            driveBackward();
