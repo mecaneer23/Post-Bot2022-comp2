@@ -25,7 +25,20 @@ public class PostBot extends Robot {
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
         this.isTeleOp = isTeleOp;
         this.camera = new Camera(opMode, "Webcam 1", hardwareMap, telemetry);
-        this.arm = new Arm("arm", "leftArm", hardwareMap, telemetry, isTeleOp);
+        this.arm = new Arm(
+                "arm",
+                "leftArm",
+                hardwareMap,
+                telemetry,
+                isTeleOp,
+                -0.026,
+                0.096,
+                0.388,
+                3.277,
+                5.462,
+                7.672,
+                7.802
+        );
         this.grabber = new Grabber("grabber", hardwareMap, telemetry);
         if (isTeleOp) {
             this.mecanum = new Mecanum(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight", telemetry);

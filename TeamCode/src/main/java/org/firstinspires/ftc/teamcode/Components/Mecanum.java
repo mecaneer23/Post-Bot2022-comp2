@@ -26,10 +26,10 @@ public class Mecanum implements Component{
         this.bl = hardwareMap.dcMotor.get(bl);
         this.br = hardwareMap.dcMotor.get(br);
 
-        this.fl.setDirection(DcMotorSimple.Direction.FORWARD);
-        this.fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.bl.setDirection(DcMotorSimple.Direction.FORWARD);
-        this.br.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.fr.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.br.setDirection(DcMotorSimple.Direction.FORWARD);
 
         this.fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

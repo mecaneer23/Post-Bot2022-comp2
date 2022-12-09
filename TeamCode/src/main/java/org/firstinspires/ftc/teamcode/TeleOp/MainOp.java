@@ -77,7 +77,7 @@ public class MainOp extends BaseOpMode {
             } else if (robot.arm.getCurrentPosition() > robot.arm.UPPER_BOUND) {
                 robot.arm.move(robot.arm.UPPER_BOUND - 1);
             } else {
-                robot.arm.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 2) + robot.arm.getCurrentPosition(), gamepad2.right_trigger - gamepad2.left_trigger);
+                robot.arm.move((int) ((gamepad2.right_trigger - gamepad2.left_trigger) * 50) + robot.arm.getCurrentPosition(), gamepad2.right_trigger - gamepad2.left_trigger);
             }
         }
 
