@@ -20,6 +20,10 @@ public class GamepadListener {
     public final Button lsb = new Button();
     public final Button rsb = new Button();
 
+    public final Button start = new Button();
+    public final Button guide = new Button();
+    public final Button back = new Button();
+
     private double plx = 0;
     private double ply = 0;
     private double prx = 0;
@@ -44,7 +48,10 @@ public class GamepadListener {
             rb,
             lb,
             lsb,
-            rsb
+            rsb,
+            start,
+            guide,
+            back
     };
 
     public void update(Gamepad gamepad) {
@@ -63,6 +70,10 @@ public class GamepadListener {
 
         lsb.update(gamepad.left_stick_button);
         rsb.update(gamepad.right_stick_button);
+
+        start.update(gamepad.start);
+        back.update(gamepad.back);
+        guide.update(gamepad.guide);
 
         if (gamepad.left_stick_x != plx ||
                 gamepad.left_stick_y != ply ||
