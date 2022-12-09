@@ -16,12 +16,18 @@ public class SleeveDetection extends OpenCvPipeline {
         W = 20,
         H = 50;
     private static final Scalar
-            lower_yellow_bounds = new Scalar(100, 100, 0, 255),
-            upper_yellow_bounds = new Scalar(255, 255, 200, 255),
-            lower_cyan_bounds = new Scalar(0, 100, 100, 255),
-            upper_cyan_bounds = new Scalar(200, 255, 255, 255),
-            lower_magenta_bounds = new Scalar(50, 0, 50, 255),
-            upper_magenta_bounds = new Scalar(255, 200, 255, 255);
+//            lower_yellow_bounds = new Scalar(100, 100, 0, 255),
+//            upper_yellow_bounds = new Scalar(255, 255, 200, 255),
+//            lower_cyan_bounds = new Scalar(0, 100, 100, 255),
+//            upper_cyan_bounds = new Scalar(200, 255, 255, 255),
+//            lower_magenta_bounds = new Scalar(50, 0, 50, 255),
+//            upper_magenta_bounds = new Scalar(255, 200, 255, 255);
+            lower_yellow_bounds = new Scalar(182, 166, 0, 255),
+            upper_yellow_bounds = new Scalar(241, 226, 72, 255),
+            lower_cyan_bounds = new Scalar(67, 109, 151, 255),
+            upper_cyan_bounds = new Scalar(163, 213, 248, 255),
+            lower_magenta_bounds = new Scalar(115, 61, 104, 255),
+            upper_magenta_bounds = new Scalar(225, 114, 170, 255);
     private final Scalar
             YELLOW = new Scalar(255, 255, 0),
             CYAN = new Scalar(0, 255, 255),
