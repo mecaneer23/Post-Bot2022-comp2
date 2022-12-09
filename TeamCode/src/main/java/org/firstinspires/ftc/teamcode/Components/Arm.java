@@ -17,6 +17,7 @@ public class Arm implements Component {
     public int LOWER_BOUND;
     public int ZERO_POSITION;
     public int GROUND_JUNCTION;
+    public int PICKUP;
     public int LOW_JUNCTION;
     public int MEDIUM_JUNCTION;
     public int HIGH_JUNCTION;
@@ -35,6 +36,7 @@ public class Arm implements Component {
             double lowerBound,
             double zeroPosition,
             double groundJunction,
+            double pickup,
             double lowJunction,
             double mediumJunction,
             double highJunction,
@@ -51,6 +53,7 @@ public class Arm implements Component {
         this.ZERO_POSITION = (int) (zeroPosition * PULSES_PER_REVOLUTION);
         this.GROUND_JUNCTION = (int) (groundJunction * PULSES_PER_REVOLUTION);
         this.LOW_JUNCTION = (int) (lowJunction * PULSES_PER_REVOLUTION);
+        this.PICKUP = (int) (pickup * PULSES_PER_REVOLUTION);
         this.MEDIUM_JUNCTION = (int) (mediumJunction * PULSES_PER_REVOLUTION);
         this.HIGH_JUNCTION = (int) (highJunction * PULSES_PER_REVOLUTION);
         this.UPPER_BOUND = (int) (upperBound * PULSES_PER_REVOLUTION);
@@ -101,6 +104,10 @@ public class Arm implements Component {
 
     public void toGround() {
         move(GROUND_JUNCTION);
+    }
+
+    public void toPickup() {
+        move(PICKUP);
     }
 
     public void toLow() {
