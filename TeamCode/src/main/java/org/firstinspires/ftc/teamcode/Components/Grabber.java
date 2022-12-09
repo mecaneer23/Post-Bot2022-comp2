@@ -15,7 +15,6 @@ public class Grabber implements Component {
     public double CLOSED;
 
     public boolean isGrabbing = false;
-    public boolean isButtonPressed = false;
 
     public Grabber(String deviceName, HardwareMap hardwareMap, Telemetry telemetry) {
         grabber = hardwareMap.get(Servo.class, deviceName);
@@ -26,7 +25,7 @@ public class Grabber implements Component {
 
     @Override
     public void init() {
-        open();
+
     }
 
     @Override
@@ -44,15 +43,8 @@ public class Grabber implements Component {
         return telemetry.toString();
     }
 
-    public void buttonPressed() {
-        if (!isButtonPressed) {
-            isGrabbing = !isGrabbing;
-            isButtonPressed = true;
-        }
-    }
-
-    public void buttonReleased() {
-        isButtonPressed = false;
+    public void toggle() {
+        isGrabbing = !isGrabbing;
     }
 
     public void open() {
