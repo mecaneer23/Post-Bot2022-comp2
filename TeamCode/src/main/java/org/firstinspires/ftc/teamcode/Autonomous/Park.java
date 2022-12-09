@@ -33,8 +33,8 @@ public class Park extends BaseOpMode {
     @Override
     public void onStart() throws InterruptedException {
         parkingPosition = robot.camera.getParkingPosition();
-        robot.encoderMecanum.driveForward(4);
-        robot.encoderMecanum.strafeLeft(4);
+        robot.encoderMecanum.driveForward(5);
+//        maybe strafe slightly depending on camera position
 
         robot.encoderMecanum.driveForward(24);
         if (parkingPosition == SleeveDetection.ParkingPosition.LEFT) {
