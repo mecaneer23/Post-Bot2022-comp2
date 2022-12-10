@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Robot;
 import org.firstinspires.ftc.teamcode.Components.Arm;
+import org.firstinspires.ftc.teamcode.Components.AutoMecanum;
 import org.firstinspires.ftc.teamcode.Components.Camera;
 import org.firstinspires.ftc.teamcode.Components.EncoderMecanum;
 import org.firstinspires.ftc.teamcode.Components.Grabber;
@@ -17,7 +18,8 @@ public class PostBot extends Robot {
     public Arm arm;
     public Grabber grabber;
     public Mecanum mecanum;
-    public EncoderMecanum encoderMecanum;
+//    public EncoderMecanum encoderMecanum;
+    public AutoMecanum encoderMecanum;
 
     @Override
     protected void mapHardware(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode, boolean isTeleOp) {
@@ -44,7 +46,7 @@ public class PostBot extends Robot {
             addComponents(mecanum);
         } else {
             this.encoderMecanum =
-                    new EncoderMecanum(
+                    new AutoMecanum(
                             opMode,
                             "frontLeft",
                             "frontRight",
