@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Components;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -10,22 +11,23 @@ public class Grabber implements Component {
     private final Servo grabber;
 
     private final Telemetry telemetry;
+    private final LinearOpMode opMode;
 
     public double OPEN;
     public double CLOSED;
 
     public boolean isGrabbing = false;
 
-    public Grabber(String deviceName, HardwareMap hardwareMap, Telemetry telemetry) {
+    public Grabber(LinearOpMode opMode, String deviceName, HardwareMap hardwareMap, Telemetry telemetry) {
         grabber = hardwareMap.get(Servo.class, deviceName);
-        this.OPEN = 0.7;
-        this.CLOSED = 1;
+        this.OPEN = 1;
+        this.CLOSED = 0.7;
         this.telemetry = telemetry;
+        this.opMode = opMode;
     }
 
     @Override
     public void init() {
-
     }
 
     @Override
@@ -35,7 +37,7 @@ public class Grabber implements Component {
 
     @Override
     public void update() {
-        grabber.setPosition(isGrabbing ? CLOSED : OPEN);
+        updatePos();
     }
 
     @Override
@@ -44,14 +46,20 @@ public class Grabber implements Component {
     }
 
     public void toggle() {
-        isGrabbing = !isGrabbing;
+        this.isGrabbing = !this.isGrabbing;
     }
 
     public void open() {
-        grabber.setPosition(OPEN);
+        this.isGrabbing = false;
+        updatePos();
     }
 
     public void close() {
-        grabber.setPosition(CLOSED);
+        this.isGrabbing = true;
+        updatePos();
+    }
+
+    public void updatePos() {
+        grabber.setPosition(this.isGrabbing ? CLOSED : OPEN);
     }
 }

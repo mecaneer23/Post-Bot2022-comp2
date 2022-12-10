@@ -40,7 +40,7 @@ public class PostBot extends Robot {
                 7.672,
                 7.802
         );
-        this.grabber = new Grabber("grabber", hardwareMap, telemetry);
+        this.grabber = new Grabber(opMode, "grabber", hardwareMap, telemetry);
         if (isTeleOp) {
             this.mecanum = new Mecanum(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight", telemetry);
             addComponents(mecanum);
@@ -69,6 +69,6 @@ public class PostBot extends Robot {
             addComponents(encoderMecanum);
         }
 
-        addComponents(camera, arm, grabber);
+        addComponents(camera, grabber, arm);
     }
 }
