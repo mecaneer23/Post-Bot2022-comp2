@@ -46,7 +46,7 @@ public class Arm implements Component {
         leftArm = hardwareMap.get(DcMotor.class, leftArmName);
 
         rightArm.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftArm.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftArm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.PULSES_PER_REVOLUTION = 384.5; // gobilda 5202 435 rpm
         this.LOWER_BOUND = (int) (lowerBound * PULSES_PER_REVOLUTION);
