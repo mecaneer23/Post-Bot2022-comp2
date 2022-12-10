@@ -53,8 +53,8 @@ public class AutoMecanum implements Component {
         this.mecanum = new Mecanum(
                 hardwareMap,
                 leftFrontName,
-                leftBackName,
                 rightFrontName,
+                leftBackName,
                 rightBackName,
                 telemetry
         );
@@ -104,22 +104,14 @@ public class AutoMecanum implements Component {
 
     @Override
     public void init() {
-        if (isTeleOp) {
-            mecanum.init();
-        }
     }
 
     @Override
     public void start() {
-        mecanum.start();
     }
 
     @Override
     public void update() {
-        if (isTeleOp) {
-            mecanum.update();
-            return;
-        }
 //        if (mecanum.fl.getCurrentPosition() != mecanum.fl.getTargetPosition()) {
 //            setMotors(((-4.0 * updateMotorPower) / Math.pow(updateTotalTicks, 2.0)) * Math.pow(updateTotalTicks / 4.0 - mecanum.fl.getCurrentPosition(), 2.0) + updateMotorPower);
 //            mecanum.telemetry.addData("motorPower", mecanum.fl.getPower());

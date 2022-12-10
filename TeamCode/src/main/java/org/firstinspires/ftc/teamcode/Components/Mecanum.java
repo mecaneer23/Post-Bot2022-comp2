@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 import org.firstinspires.ftc.teamcode.RMath.*;
 
-public class Mecanum implements Component{
+public class Mecanum implements Component {
     public DcMotor fl;
     public DcMotor fr;
     public DcMotor bl;
@@ -35,6 +35,11 @@ public class Mecanum implements Component{
         this.fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        this.fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void move(double fl, double fr, double bl, double br) {
