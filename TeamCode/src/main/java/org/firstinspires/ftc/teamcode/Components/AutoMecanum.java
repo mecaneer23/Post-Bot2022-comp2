@@ -10,9 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Base.Component;
 
-import java.util.ArrayList;
-
-public class EncoderMecanum implements Component {
+public class AutoMecanum implements Component {
     private static final double PULSES_PER_REVOLUTION = 384.5; // 435 rpm goBilda 5202
     private static final double WHEEL_DIAMETER_IN = 3.77953; // 96 mm
     private static final double PULSES_PER_IN = PULSES_PER_REVOLUTION / (WHEEL_DIAMETER_IN * Math.PI);
@@ -22,15 +20,10 @@ public class EncoderMecanum implements Component {
     private final double kP, kI, kD;
     private final boolean isTeleOp;
     public Mecanum mecanum;
-    private double updateMotorPower, updateTotalTicks;
     private Telemetry telemetry;
-    private boolean isRunning = false;
-    private final ArrayList<goFunction> instructionList = new ArrayList<>();
-    private final ArrayList<double[]> params = new ArrayList<>();
-    private int instructionPointer = 0;
-    private boolean hasUpdated = false;
+    private double updateMotorPower, updateTotalTicks;
 
-    public EncoderMecanum(
+    public AutoMecanum(
             LinearOpMode opMode,
             String leftFrontName,
             String rightFrontName,
@@ -60,28 +53,23 @@ public class EncoderMecanum implements Component {
         this.mecanum = new Mecanum(
                 hardwareMap,
                 leftFrontName,
-                rightFrontName,
                 leftBackName,
+                rightFrontName,
                 rightBackName,
                 telemetry
         );
 
-        this.telemetry = telemetry;
         this.isTeleOp = isTeleOp;
         this.opMode = opMode;
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
+        this.telemetry = telemetry;
     }
 
-    private void addInstruction(@NonNull goFunction direction, double distanceIN, double motorPower) throws InterruptedException {
-        instructionList.add(direction);
-        params.add(new double[]{distanceIN, motorPower});
-    }
-
-    private void drive(@NonNull goFunction direction, double distanceIN, double motorPower) {
-//        ElapsedTime timer = new ElapsedTime();
-//        double proportional, integral = 0, derivative, pid, prevError = 0;
+    private void drive(@NonNull goFunction direction, double distanceIN, double motorPower) throws InterruptedException {
+        ElapsedTime timer = new ElapsedTime();
+        double proportional, integral = 0, derivative, pid, prevError = 0;
         double totalTicks = PULSES_PER_IN * distanceIN;
         resetEncoders();
         direction.run((int) totalTicks);
@@ -92,25 +80,25 @@ public class EncoderMecanum implements Component {
         }
         updateMotorPower = motorPower;
         updateTotalTicks = totalTicks;
-//        while (
-//                mecanum.fl.getCurrentPosition() != mecanum.fl.getTargetPosition()
-//        ) {
-//            if (USE_PID) {
-//                proportional = totalTicks - mecanum.fl.getCurrentPosition();
-//                integral += proportional * timer.seconds();
-//                derivative = (proportional - prevError) / timer.seconds();
-//                pid = (kP * proportional) + (kI * integral) + (kD * derivative);
-//                setMotors(Math.min(pid, motorPower));
-//                prevError = proportional;
-//                timer.reset();
-//            } else {
-//                setMotors(calculateMotorPower(mecanum.fl.getCurrentPosition(), motorPower, totalTicks));
-//                this.telemetry.addData("motorPower", mecanum.fl.getPower());
-//                this.telemetry.update();
-//            }
-//        }
-//        stopDriving();
-//        setRunWithoutEncoders();
+        while (
+                mecanum.fl.getCurrentPosition() != mecanum.fl.getTargetPosition()
+        ) {
+            if (USE_PID) {
+                proportional = totalTicks - mecanum.fl.getCurrentPosition();
+                integral += proportional * timer.seconds();
+                derivative = (proportional - prevError) / timer.seconds();
+                pid = (kP * proportional) + (kI * integral) + (kD * derivative);
+                setMotors(Math.min(pid, motorPower));
+                prevError = proportional;
+                timer.reset();
+            } else {
+                setMotors(((-4.0 * motorPower) / Math.pow(totalTicks, 2.0)) * Math.pow(totalTicks / 4.0 - mecanum.fl.getCurrentPosition(), 2.0) + motorPower);
+                telemetry.addData("motorPower", mecanum.fl.getPower());
+                telemetry.update();
+            }
+        }
+        stopDriving();
+        setRunWithoutEncoders();
         opMode.sleep((long) DELAY_BETWEEN_METHODS);
     }
 
@@ -132,45 +120,20 @@ public class EncoderMecanum implements Component {
             mecanum.update();
             return;
         }
-        if (!getIsRunning() && !hasUpdated) {
-            instructionPointer++;
-            hasUpdated = true;
-        } else if (getIsRunning() && hasUpdated) {
-            hasUpdated = false;
-        }
-        if (instructionList.size() < instructionPointer + 1) {
-            return;
-        }
-        for (goFunction i : instructionList) {
-            telemetry.addData("item", i);
-        }
-        telemetry.update();
-        drive(instructionList.get(instructionPointer), params.get(instructionPointer)[0], params.get(instructionPointer)[1]);
-
-        if (mecanum.fl.getCurrentPosition() > mecanum.fl.getTargetPosition() - 50 && mecanum.fl.getCurrentPosition() < mecanum.fl.getTargetPosition() + 50) {
-            setMotors(calculateMotorPower(mecanum.fl.getCurrentPosition(), updateMotorPower, updateTotalTicks));
-            this.telemetry.addData("motorPower", mecanum.fl.getPower());
-            this.telemetry.update();
-        } else {
-            stopDriving();
-            setRunWithoutEncoders();
-            opMode.sleep((long) DELAY_BETWEEN_METHODS);
-        }
-    }
-
-    public boolean getIsRunning() {
-        return this.isRunning;
-    }
-
-    private double calculateMotorPower(int currentPositionTicks, double maxPower, double totalDistanceTicks) {
-        double motorPower = ((-4.0 * maxPower) / Math.pow(totalDistanceTicks, 2.0)) * Math.pow(totalDistanceTicks / 4.0 - currentPositionTicks, 2.0) + maxPower;
-        this.isRunning = motorPower >= 0.1;
-        return motorPower;
+//        if (mecanum.fl.getCurrentPosition() != mecanum.fl.getTargetPosition()) {
+//            setMotors(((-4.0 * updateMotorPower) / Math.pow(updateTotalTicks, 2.0)) * Math.pow(updateTotalTicks / 4.0 - mecanum.fl.getCurrentPosition(), 2.0) + updateMotorPower);
+//            mecanum.telemetry.addData("motorPower", mecanum.fl.getPower());
+//            mecanum.telemetry.update();
+//        } else {
+//            stopDriving();
+//            setRunWithoutEncoders();
+//            opMode.sleep((long) DELAY_BETWEEN_METHODS);
+//        }
     }
 
     @Override
     public String getTelemetry() {
-        return this.telemetry.toString();
+        return null;
     }
 
     private void setRunToPosition() {
@@ -286,7 +249,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void driveForward(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goForward, distanceIN, motorPower);
+        drive(this::goForward, distanceIN, motorPower);
     }
 
     public void driveBackward(double distanceIN) throws InterruptedException {
@@ -294,7 +257,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void driveBackward(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goBackward, distanceIN, motorPower);
+        drive(this::goBackward, distanceIN, motorPower);
     }
 
     public void strafeLeft(double distanceIN) throws InterruptedException {
@@ -302,7 +265,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void strafeLeft(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goLeft, distanceIN * STRAFE_MULTIPLIER, motorPower);
+        drive(this::goLeft, distanceIN * STRAFE_MULTIPLIER, motorPower);
     }
 
     public void strafeRight(double distanceIN) throws InterruptedException {
@@ -310,7 +273,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void strafeRight(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goRight, distanceIN * STRAFE_MULTIPLIER, motorPower);
+        drive(this::goRight, distanceIN * STRAFE_MULTIPLIER, motorPower);
     }
 
     public void strafeNW(double distanceIN) throws InterruptedException {
@@ -318,7 +281,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void strafeNW(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goNW, distanceIN, motorPower);
+        drive(this::goNW, distanceIN, motorPower);
     }
 
     public void strafeNE(double distanceIN) throws InterruptedException {
@@ -326,7 +289,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void strafeNE(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goNE, distanceIN, motorPower);
+        drive(this::goNE, distanceIN, motorPower);
     }
 
     public void strafeSW(double distanceIN) throws InterruptedException {
@@ -334,7 +297,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void strafeSW(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goSW, distanceIN, motorPower);
+        drive(this::goSW, distanceIN, motorPower);
     }
 
     public void strafeSE(double distanceIN) throws InterruptedException {
@@ -342,7 +305,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void strafeSE(double distanceIN, double motorPower) throws InterruptedException {
-        addInstruction(this::goSE, distanceIN, motorPower);
+        drive(this::goSE, distanceIN, motorPower);
     }
 
     public void turnLeft() throws InterruptedException {
@@ -354,7 +317,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void turnLeft(int degrees, double motorPower) throws InterruptedException {
-        addInstruction(this::goTurnLeft, (int) (TURN_CONSTANT * degrees), motorPower);
+        drive(this::goTurnLeft, (int) (TURN_CONSTANT * degrees), motorPower);
     }
 
     public void turnRight() throws InterruptedException {
@@ -366,7 +329,7 @@ public class EncoderMecanum implements Component {
     }
 
     public void turnRight(int degrees, double motorPower) throws InterruptedException {
-        addInstruction(this::goTurnRight, (int) (TURN_CONSTANT * degrees), motorPower);
+        drive(this::goTurnRight, (int) (TURN_CONSTANT * degrees), motorPower);
     }
 
     private interface goFunction {

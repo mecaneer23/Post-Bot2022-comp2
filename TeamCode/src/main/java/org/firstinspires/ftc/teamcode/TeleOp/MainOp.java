@@ -46,6 +46,20 @@ public class MainOp extends BaseOpMode {
             slowmode = !slowmode;
         };
 
+        gamepadListener1.du.onPress = () -> {
+            y = - 1;
+        };
+        gamepadListener1.dd.onPress = () -> {
+            y = 1;
+        };
+        gamepadListener1.dl.onPress = () -> {
+            x = - 1;
+        };
+        gamepadListener1.dr.onPress = () -> {
+            x = 1;
+        };
+
+
         gamepadListener2.lb.onPress = () -> {
             robot.arm.toZero();
         };
@@ -86,7 +100,7 @@ public class MainOp extends BaseOpMode {
 
     @Override
     public void onUpdate() throws InterruptedException {
-        speed = (gamepad1.left_bumper ? 0.25 : (gamepad1.right_bumper || slowmode ? 0.5 : 1)) * (gamepad1.left_stick_button ? 1 : 0.75);
+        speed = (gamepad1.left_bumper ? 0.25 : (gamepad1.right_bumper || slowmode ? 0.5 : 1)) * (gamepad1.left_stick_button ? 1 : 0.65);
         x = gamepad1.left_stick_x * speed;
         y = - gamepad1.left_stick_y * speed;
         rot = gamepad1.right_stick_x * speed;
