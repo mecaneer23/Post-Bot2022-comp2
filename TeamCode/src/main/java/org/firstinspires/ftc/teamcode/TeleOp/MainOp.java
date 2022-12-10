@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Bots.PostBot;
 @TeleOp
 public class MainOp extends BaseOpMode {
     public PostBot robot;
-    public double x, y, rot, speed;
+    public double x, y, rot, speed, xModifier, yModifier;
     public boolean slowmode;
 
     @Override
@@ -31,34 +31,20 @@ public class MainOp extends BaseOpMode {
 
     @Override
     public void onStart() throws InterruptedException {
-        gamepadListener1.y.onPress = () -> {
-            robot.grabber.close();
-            robot.arm.toHigh();
-//            driveForward();
-        };
-        gamepadListener1.a.onPress = () -> {
-            robot.grabber.open();
-            robot.arm.toZero();
-//            driveBackward();
-        };
+//        gamepadListener1.y.onPress = () -> {
+//            robot.grabber.close();
+//            robot.arm.toHigh();
+////            driveForward();
+//        };
+//        gamepadListener1.a.onPress = () -> {
+//            robot.grabber.open();
+//            robot.arm.toZero();
+////            driveBackward();
+//        };
 
         gamepadListener1.start.onRelease = () -> {
             slowmode = !slowmode;
         };
-
-        gamepadListener1.du.onPress = () -> {
-            y = - 1;
-        };
-        gamepadListener1.dd.onPress = () -> {
-            y = 1;
-        };
-        gamepadListener1.dl.onPress = () -> {
-            x = - 1;
-        };
-        gamepadListener1.dr.onPress = () -> {
-            x = 1;
-        };
-
 
         gamepadListener2.lb.onPress = () -> {
             robot.arm.toZero();
@@ -101,9 +87,21 @@ public class MainOp extends BaseOpMode {
     @Override
     public void onUpdate() throws InterruptedException {
         speed = (gamepad1.left_bumper ? 0.25 : (gamepad1.right_bumper || slowmode ? 0.5 : 1)) * (gamepad1.left_stick_button ? 1 : 0.65);
-        x = gamepad1.left_stick_x * speed;
-        y = - gamepad1.left_stick_y * speed;
-        rot = gamepad1.right_stick_x * speed;
+        x = gamepad1.left_stick_x;
+        y = - gamepad1.left_stick_y;
+        rot = gamepad1.right_stick_x;
+
+        if (gamepad1.dpad_up) {
+            y = 1;
+        } else if (gamepad1.dpad_down) {
+            y = - 1;
+        }
+
+        if (gamepad1.dpad_right) {
+            x = 1;
+        } else if (gamepad1.dpad_left) {
+            x = - 1;
+        }
 
         if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
             if (robot.arm.getCurrentPosition() < robot.arm.LOWER_BOUND) {
@@ -115,7 +113,7 @@ public class MainOp extends BaseOpMode {
             }
         }
 
-        robot.mecanum.drive(x, y, rot);
+        robot.mecanum.drive(x * speed, y * speed, rot * speed);
         telemetry.update();
     }
 }
