@@ -69,7 +69,7 @@ public class Arm implements Component {
         rightArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        move(ZERO_POSITION);
+        move(isTeleOp ? ZERO_POSITION : LOWER_BOUND);
     }
 
     @Override

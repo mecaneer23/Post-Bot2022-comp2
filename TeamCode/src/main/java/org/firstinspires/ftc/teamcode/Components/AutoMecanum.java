@@ -22,6 +22,7 @@ public class AutoMecanum implements Component {
     public Mecanum mecanum;
     private Telemetry telemetry;
     private double updateMotorPower, updateTotalTicks;
+    private Component arm;
 
     public AutoMecanum(
             LinearOpMode opMode,
@@ -41,7 +42,8 @@ public class AutoMecanum implements Component {
             boolean usePID, // https://www.ctrlaltftc.com/the-pid-controller/tuning-methods-of-a-pid-controller
             double kP,
             double kI,
-            double kD
+            double kD,
+            Component arm
     ) {
         DRIVE_SPEED = driveSpeed;
         TURN_SPEED = turnSpeed;
@@ -65,6 +67,7 @@ public class AutoMecanum implements Component {
         this.kI = kI;
         this.kD = kD;
         this.telemetry = telemetry;
+        this.arm = arm;
     }
 
     private void drive(@NonNull goFunction direction, double distanceIN, double motorPower) throws InterruptedException {
@@ -95,6 +98,7 @@ public class AutoMecanum implements Component {
                 setMotors(((-4.0 * motorPower) / Math.pow(totalTicks, 2.0)) * Math.pow(totalTicks / 4.0 - mecanum.fl.getCurrentPosition(), 2.0) + motorPower);
                 telemetry.addData("motorPower", mecanum.fl.getPower());
                 telemetry.update();
+                arm.update();
             }
         }
         stopDriving();

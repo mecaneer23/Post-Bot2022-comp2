@@ -64,7 +64,8 @@ public class PostBot extends Robot {
                             false,
                             0,
                             0,
-                            0
+                            0,
+                            arm
                     );
             addComponents(encoderMecanum);
         }
